@@ -1,27 +1,13 @@
 ﻿@startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+hide empty members
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
+class TP_CharacterController<<M, yellow>>
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+class ControllerConfiguration<<S, violet>>
 
-class ArrayList {
-Object[] elementData
-size()
-}
+class InputConfiguration<<S, violet>>
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
-}
 
 @enduml
