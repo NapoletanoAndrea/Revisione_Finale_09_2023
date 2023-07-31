@@ -11,6 +11,8 @@ namespace CharacterController
 		[SerializeField] private KeyCode _crouchKey = KeyCode.C;
 		[SerializeField] private KeyCode _runKey = KeyCode.LeftShift;
 
+		private Vector2 moveInput;
+
 		private void Awake()
 		{
 			_movement = GetComponent<CharacterMovement>();
@@ -28,11 +30,17 @@ namespace CharacterController
 
 			if (Input.GetKeyDown(_runKey))
 				_movement.isRunning = !_movement.isRunning;
+
+			moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 		}
 
 		private void FixedUpdate()
 		{
-			_movement.Move(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * Time.fixedDeltaTime);
+			if (moveInput.magnitude < Mathf.Epsilon)
+				return;
+			
+			_movement.Move(moveInput * Time.fixedDeltaTime);
+			_movement.Rotate(moveInput, Time.fixedDeltaTime);
 		}
 	}
 

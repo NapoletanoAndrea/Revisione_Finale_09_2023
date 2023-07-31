@@ -29,6 +29,15 @@ namespace CharacterController.Utilities
 		}
 		
 		#endregion
+		
+		#region Vector2
+
+		public static Vector3 InputToDirection(this Vector2 input)
+		{
+			return new Vector3(input.x, 0, input.y);
+		}
+		
+		#endregion
 
 	}
 

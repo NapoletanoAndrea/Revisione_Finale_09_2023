@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using CharacterController.Utilities;
 using UnityEngine;
 
 namespace CharacterController
@@ -7,6 +8,7 @@ namespace CharacterController
 
 	public class CharacterMovement : MonoBehaviour
 	{
+		public new Transform transform;
 		public new Rigidbody rigidbody;
 
 		[Header("Movement")] public float speedMultiplier;
@@ -27,6 +29,10 @@ namespace CharacterController
 		public LayerMask groundMask;
 		public Color gizmosColor = Color.green;
 
+		[Header("Rotation")] public float rotationSpeed;
+		public AnimationCurve rotationCurve;
+		public bool isInstant;
+
 		[Header("Runtime Values")] public bool isGrounded;
 		public bool isCrouched;
 		public bool isRunning;
@@ -36,6 +42,11 @@ namespace CharacterController
 
 		private void OnValidate()
 		{
+			if (transform == null)
+			{
+				transform = GetComponent<Transform>();
+			}
+			
 			if (rigidbody == null)
 			{
 				rigidbody = GetComponent<Rigidbody>();
@@ -79,7 +90,7 @@ namespace CharacterController
 
 		public void Move(Vector2 movementInput)
 		{
-			Move(new Vector3(movementInput.x, 0, movementInput.y));
+			Move(movementInput.InputToDirection());
 		}
 
 		public void Move(Vector3 direction)
@@ -87,6 +98,21 @@ namespace CharacterController
 			var movementVector = GetSpeed() * speedMultiplier * direction;
 			movementVector.y += rigidbody.velocity.y;
 			rigidbody.velocity = movementVector;
+		}
+
+		public void Rotate(Vector2 movementInput, float deltaTime)
+		{
+			Rotate(movementInput.InputToDirection(), deltaTime);
+		}
+
+		public void Rotate(Vector3 direction, float deltaTime)
+		{
+			if (isInstant)
+			{
+				transform.forward = direction;
+				return;
+			}
+			transform.forward = Vector3.Lerp(transform.forward, direction, rotationSpeed * deltaTime);
 		}
 
 		#endregion
