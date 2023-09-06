@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using CharacterController.Utilities;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace CharacterController
@@ -10,6 +8,7 @@ namespace CharacterController
 	{
 		public new Transform transform;
 		public new Rigidbody rigidbody;
+		public Transform cameraTransform;
 
 		[Header("Movement")] public float speedMultiplier;
 		public float walkSpeed;
@@ -51,6 +50,15 @@ namespace CharacterController
 			{
 				rigidbody = GetComponent<Rigidbody>();
 			}
+
+			if (cameraTransform == null)
+			{
+				cameraTransform = Camera.main.transform;
+				if (cameraTransform == null)
+				{
+					cameraTransform = FindObjectOfType<Camera>().transform;
+				}
+			}
 		}
 
 		private void Update()
@@ -90,7 +98,7 @@ namespace CharacterController
 
 		public void Move(Vector2 movementInput)
 		{
-			Move(movementInput.InputToDirection());
+			Move(movementInput.InputToDirection(cameraTransform));
 		}
 
 		public void Move(Vector3 direction)
@@ -102,7 +110,7 @@ namespace CharacterController
 
 		public void Rotate(Vector2 movementInput, float deltaTime)
 		{
-			Rotate(movementInput.InputToDirection(), deltaTime);
+			Rotate(movementInput.InputToDirection(cameraTransform), deltaTime);
 		}
 
 		public void Rotate(Vector3 direction, float deltaTime)
