@@ -3,11 +3,7 @@
 
 hide empty members
 
-class TP_CharacterController<<M, yellow>>
-
-class ControllerConfiguration<<S, violet>>
-
-class InputConfiguration<<S, violet>>
+class s
 
 
 @enduml
