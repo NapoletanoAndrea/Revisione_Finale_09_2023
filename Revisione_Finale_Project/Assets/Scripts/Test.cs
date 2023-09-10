@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+﻿using AI_Perception.Interfaces;
+using UnityEngine;
 
-namespace DefaultNamespace
+public class Test : MonoBehaviour
 {
+	public MonoBehaviour mono;
 
 	
-	public class Test : MonoBehaviour
-	{
-		public Preset<Well> preset;
-	}
 
 }

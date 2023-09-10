@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 
 public static class Extensions
@@ -80,5 +82,61 @@ public static class Extensions
 	}
 	
 	#endregion
+	
+	#region string
+
+	public static string SerializedName(this string name)
+	{
+		if (name.Length > 0)
+		{
+			StringBuilder strBuilder = new StringBuilder(name);
+			if (strBuilder[0] == '_')
+				strBuilder.Remove(0, 1);
+
+			strBuilder[0] = char.ToUpper(strBuilder[0]);
+
+			for (int i = 1; i < strBuilder.Length; i++)
+			{
+				if (char.IsUpper(strBuilder[i]))
+				{
+					strBuilder.Insert(i, ' ');
+					i++;
+				}
+			}
+			
+			return strBuilder.ToString();
+		}
+		return name;
+	}
+	
+	#endregion
+	
+	#region int
+
+	public static bool ToBool(this int value) => value != 0;
+
+	#endregion
+	
+	#if UNITY_EDITOR
+	
+	#region SerializedProperty
+	
+	public static object GetValue( this UnityEditor.SerializedProperty property )
+	{
+		object obj = property.serializedObject.targetObject;
+ 
+		FieldInfo field = null;
+		foreach( var path in property.propertyPath.Split( '.' ) )
+		{
+			var type = obj.GetType();
+			field = type.GetField( path );
+			obj = field.GetValue( obj );
+		}
+		return obj;
+	}
+	
+	#endregion
+	
+	#endif
 
 }

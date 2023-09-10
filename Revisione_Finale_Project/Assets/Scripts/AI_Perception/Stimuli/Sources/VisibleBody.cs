@@ -11,6 +11,7 @@ namespace AI_Perception.Stimuli.Sources
 		[ReadOnly] public float intensity;
 		public StimulusType stimulusType;
 
+		public GameObject GameObject => gameObject;
 		public float Intensity => intensity;
 		public StimulusType StimulusType => stimulusType;
 	}

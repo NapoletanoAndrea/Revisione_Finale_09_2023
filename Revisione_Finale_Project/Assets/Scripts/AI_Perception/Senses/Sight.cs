@@ -1,15 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using AI_Perception.Stimuli;
 using AI_Perception.Stimuli.Sources;
 using UnityEngine;
 
 namespace AI_Perception.Senses
 {
 
-	public class Sight : Sense
+	[Serializable]
+	public class SightSettings
 	{
-		[Header("Sight Settings")] [HideInInspector]
-		public Transform origin;
-		public Vector3 originOffset;
+		[Header("Sight")]
 		public float radius;
 		public AnimationCurve intensityRadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
 		public float fovAngle;
@@ -17,17 +19,24 @@ namespace AI_Perception.Senses
 		public LayerMask obstacleMask;
 		public float tickInterval;
 
-		private Vector3 Origin => origin.position + originOffset;
-
-		[Header("Stimuli Settings")] public LayerMask stimuliMask;
+		[Header("Stimuli")] public LayerMask stimuliMask;
 		public bool checkTriggers;
 		public bool useStimulusSource;
+		public List<StimulusType> detectableStimuli;
 
 		[Header("Gizmos")] public bool displayGizmos = true;
 		public Color radiusColor = Color.red;
 		public Color fovColor = Color.yellow;
-
+	}
+	
+	public class Sight : Sense
+	{
+		public Transform origin;
+		public Vector3 originOffset;
+		public Preset<SightSettings> settingsPresets;
 		private Coroutine _checkCor;
+		
+		public Vector3 Origin => origin.position + originOffset;
 
 		private void OnValidate()
 		{
@@ -45,63 +54,78 @@ namespace AI_Perception.Senses
 			StopCoroutine(_checkCor);
 			_checkCor = null;
 		}
+		
+		protected override List<StimulusType> GetDetectableStimuli()
+		{
+			return settingsPresets.Value.detectableStimuli;
+		}
 
 		private IEnumerator CheckSources()
 		{
-			var waitForSeconds = new WaitForSeconds(tickInterval);
 			while (true)
 			{
-				var results = Physics.OverlapSphere(Origin, radius, stimuliMask, checkTriggers.ToQueryTriggerInteraction());
+				var sightSettings = settingsPresets.Value;
+				var results = Physics.OverlapSphere(Origin, sightSettings.radius, sightSettings.stimuliMask, sightSettings.checkTriggers.ToQueryTriggerInteraction());
 				foreach (var result in results)
 				{
+					Debug.Log(results.Length);
 					#region fov calc
 
 					Vector3 directionToTarget = (result.transform.position - Origin).normalized;
-					if (Vector3.Angle(transform.forward, directionToTarget) >= fovAngle / 2)
+					if (Vector3.Angle(transform.forward, directionToTarget) >= sightSettings.fovAngle / 2)
 					{
 						continue;
 					}
 
 					float distanceToTarget = Vector3.Distance(Origin, result.transform.position);
-					if (Physics.Raycast(Origin, directionToTarget, distanceToTarget, obstacleMask, QueryTriggerInteraction.Ignore))
+					if (Physics.Raycast(Origin, directionToTarget, distanceToTarget, sightSettings.obstacleMask, QueryTriggerInteraction.Ignore))
 					{
 						continue;
 					}
 
 					#endregion
 
-					if (useStimulusSource)
+					if (sightSettings.useStimulusSource)
 					{
 						var stimulusSource = result.GetComponent<IStimulusSource<Sight>>();
 						if (stimulusSource != null)
 						{
-							if (stimulusSource.Intensity < triggerIntensity * intensityRadiusCurve.Evaluate(distanceToTarget))
+							if (stimulusSource.Intensity < triggerIntensity * sightSettings.intensityRadiusCurve.Evaluate(distanceToTarget))
 								continue;
 
-							Trigger(stimulusSource.Intensity);
+							Trigger(stimulusSource);
 						}
 						continue;
 					}
 
-					Trigger(Mathf.Infinity);
+					Trigger(null);
 				}
 
-				yield return waitForSeconds;
+				yield return new WaitForSeconds(settingsPresets.Value.tickInterval);
 			}
 		}
 
 		private void OnDrawGizmosSelected()
 		{
-			if (!displayGizmos)
+			if(settingsPresets == null)
+				return;
+			
+			if(settingsPresets.EditorValue == null)
+				return;
+			
+			var sightSettings = settingsPresets.EditorValue;
+
+			if (!sightSettings.displayGizmos)
 				return;
 
-			Gizmos.color = radiusColor;
-			Gizmos.DrawWireSphere(Origin, radius);
+			Gizmos.color = sightSettings.radiusColor;
+			Gizmos.DrawWireSphere(Origin, sightSettings.radius);
 
-			Gizmos.color = fovColor;
-			Gizmos.DrawRay(Origin, Quaternion.Euler(origin.up * (fovAngle / 2 + fovAngleOffset)) * origin.forward * radius);
-			Gizmos.DrawRay(Origin, Quaternion.Euler(-origin.up * (fovAngle / 2 - fovAngleOffset)) * origin.forward * radius);
+			Gizmos.color = sightSettings.fovColor;
+			Gizmos.DrawRay(Origin, Quaternion.Euler(origin.up * (sightSettings.fovAngle / 2 + sightSettings.fovAngleOffset)) * origin.forward * sightSettings.radius);
+			Gizmos.DrawRay(Origin, Quaternion.Euler(-origin.up * (sightSettings.fovAngle / 2 - sightSettings.fovAngleOffset)) * origin.forward * sightSettings.radius);
 		}
+		
 	}
 
 }

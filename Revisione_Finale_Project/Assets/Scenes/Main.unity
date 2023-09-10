@@ -168,9 +168,9 @@ GameObject:
   - component: {fileID: 55561477}
   - component: {fileID: 55561476}
   - component: {fileID: 55561480}
-  - component: {fileID: 55561479}
   - component: {fileID: 55561482}
   - component: {fileID: 55561481}
+  - component: {fileID: 55561483}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -257,65 +257,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55561474}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &55561479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55561474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11bd16bfeb4e4b4a9b3886e20f37d1c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  notifiers:
-  - {fileID: 55561480}
-  persistenceSeconds: 0
-  persistIndefinitely: 0
-  triggerIntensity: 25
-  IsAlerted: 0
-  origin: {fileID: 55561475}
-  originOffset: {x: 0, y: 0, z: 0}
-  radius: 3.69
-  intensityRadiusCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  fovAngle: 60
-  fovAngleOffset: 0
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 1
-  tickInterval: 0.1
-  stimuliMask:
-    serializedVersion: 2
-    m_Bits: 9
-  checkTriggers: 1
-  useStimulusSource: 0
-  displayGizmos: 1
-  radiusColor: {r: 1, g: 0, b: 0, a: 1}
-  fovColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &55561480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,41 +269,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2885630558824bbfa56a9e33cc77b3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notifyTo: []
+  notifyTo:
+  - {fileID: 55561483}
 --- !u!114 &55561481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55561474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd312f6a5e614af0ba212c6e1ae48498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  preset:
-    _size: 5
-    _currentIndex: 0
-    _currentTag: 
-    _tags:
-    - fds
-    - 
-    - 
-    - 
-    - 
-    values:
-    - fuck: 0
-      tag: 
-    - fuck: 0
-      tag: 
-    - fuck: 0
-      tag: 
-    - fuck: 0
-      tag: 
-    - fuck: 0
-      tag: 
---- !u!114 &55561482
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -374,46 +283,166 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c561d1be59b24c209369233feca71764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notifiers: []
+  notifiers:
+  - {fileID: 55561480}
   persistenceSeconds: 0
   persistIndefinitely: 0
   triggerIntensity: 0
-  IsAlerted: 0
   origin: {fileID: 55561475}
   originOffset: {x: 0, y: 0, z: 0}
-  radius: 4.27
-  intensityRadiusCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  tickInterval: 0
-  stimuliMask:
-    serializedVersion: 2
-    m_Bits: 0
-  checkTriggers: 0
-  useStimulusSource: 0
-  displayGizmos: 1
-  radiusColor: {r: 1, g: 0, b: 0, a: 0.5}
+  settingsPresets:
+    _editorIndex: 0
+    _size: 2
+    _currentIndex: 0
+    _currentTag: 
+    _tags:
+    - 
+    - 
+    values:
+    - radius: 5.6
+      intensityRadiusCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      tickInterval: 0
+      stimuliMask:
+        serializedVersion: 2
+        m_Bits: 8
+      checkTriggers: 0
+      useStimulusSource: 0
+      displayGizmos: 1
+      radiusColor: {r: 1, g: 0, b: 0, a: 0.5}
+    - radius: 0
+      intensityRadiusCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      tickInterval: 0
+      stimuliMask:
+        serializedVersion: 2
+        m_Bits: 0
+      checkTriggers: 0
+      useStimulusSource: 0
+      displayGizmos: 1
+      radiusColor: {r: 1, g: 0, b: 0, a: 0.5}
+--- !u!114 &55561482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55561474}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11bd16bfeb4e4b4a9b3886e20f37d1c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notifiers:
+  - {fileID: 55561480}
+  persistenceSeconds: 0
+  persistIndefinitely: 0
+  triggerIntensity: 0
+  origin: {fileID: 55561475}
+  originOffset: {x: 0, y: 0, z: 0}
+  settingsPresets:
+    _editorIndex: 0
+    _size: 1
+    _currentIndex: 0
+    _currentTag: 
+    _tags:
+    - 
+    values:
+    - radius: 5.22
+      intensityRadiusCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      fovAngle: 60
+      fovAngleOffset: 0
+      obstacleMask:
+        serializedVersion: 2
+        m_Bits: 0
+      tickInterval: 0
+      stimuliMask:
+        serializedVersion: 2
+        m_Bits: 8
+      checkTriggers: 0
+      useStimulusSource: 0
+      displayGizmos: 1
+      radiusColor: {r: 1, g: 0, b: 0, a: 1}
+      fovColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &55561483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55561474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd312f6a5e614af0ba212c6e1ae48498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &71136665
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +472,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 71136665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0}
+  m_LocalPosition: {x: 4.86, y: 0.9, z: 7.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -659,7 +688,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.19388744, y: 0.000000018872267, z: -0.000000003729874, w: 0.9810238}
-  m_LocalPosition: {x: 0, y: -2.3000002, z: -1.5699999}
+  m_LocalPosition: {x: 4.86, y: -2.3000002, z: 5.6099997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1114,7 +1143,7 @@ GameObject:
   - component: {fileID: 883160613}
   - component: {fileID: 883160612}
   - component: {fileID: 883160611}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1460,7 +1489,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082260320}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.3000002, z: -1.5699999}
+  m_LocalPosition: {x: 4.86, y: -2.3000002, z: 5.6099997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1570,7 +1599,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1372818696}
-  m_LocalRotation: {x: 0.2116997, y: -0.00000001800138, z: 0.000000003899264, w: 0.9773348}
+  m_LocalRotation: {x: 0.21169968, y: -0.000000010294941, z: 0.0000000022299786, w: 0.9773348}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

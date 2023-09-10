@@ -3,7 +3,7 @@
 namespace AI_Perception.Stimuli
 {
 
-	[CreateAssetMenu(fileName = "Stimulus Type", menuName = "Data/Stimulus Type")]
+	[CreateAssetMenu(fileName = "Stimulus Type", menuName = "Data/AI Perception/Stimulus Type")]
 	public class StimulusType : ScriptableObject
 	{
 		[SerializeField] private string _tag;

@@ -1,28 +1,37 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using AI_Perception.Stimuli;
 using AI_Perception.Stimuli.Sources;
 using UnityEngine;
 
 namespace AI_Perception.Senses
 {
 
-	public class Hearing : Sense
+	[Serializable]
+	public class HearingSettings
 	{
-		[Header("Hearing Settings")] [HideInInspector]
-		public Transform origin;
-		public Vector3 originOffset;
+		[Header("Hearing Settings")]
 		public float radius;
 		public AnimationCurve intensityRadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
 		public float tickInterval;
-
-		private Vector3 Origin => origin.position + originOffset;
-
+		
 		[Header("Stimuli Settings")] public LayerMask stimuliMask;
 		public bool checkTriggers;
 		public bool useStimulusSource;
+		public List<StimulusType> detectableStimuli;
 
 		[Header("Gizmos")] public bool displayGizmos = true;
-		public Color radiusColor = new Color(1, 0, 0, .5f);
+		public Color radiusColor = new(1, 0, 0, .5f);
+	}
+
+	public class Hearing : Sense
+	{
+		public Transform origin;
+		public Vector3 originOffset;
+		private Vector3 Origin => origin.position + originOffset;
+
+		public Preset<HearingSettings> settingsPresets;
 
 		private Coroutine _checkCor;
 
@@ -42,44 +51,58 @@ namespace AI_Perception.Senses
 			StopCoroutine(_checkCor);
 			_checkCor = null;
 		}
+		
+		protected override List<StimulusType> GetDetectableStimuli()
+		{
+			return settingsPresets.Value.detectableStimuli;
+		}
 
 		private IEnumerator CheckSources()
 		{
-			var waitForSeconds = new WaitForSeconds(tickInterval);
 			while (true)
 			{
-				var results = Physics.OverlapSphere(Origin, radius, stimuliMask, checkTriggers.ToQueryTriggerInteraction());
+				var hearingSettings = settingsPresets.Value;
+				var results = Physics.OverlapSphere(Origin, hearingSettings.radius, hearingSettings.stimuliMask, hearingSettings.checkTriggers.ToQueryTriggerInteraction());
 				foreach (var result in results)
 				{
-					if (useStimulusSource)
+					if (hearingSettings.useStimulusSource)
 					{
 						var stimulusSource = result.GetComponent<IStimulusSource<Sight>>();
 						if (stimulusSource != null)
 						{
 							float distanceToTarget = Vector3.Distance(Origin, result.transform.position);
-							if (stimulusSource.Intensity < triggerIntensity * intensityRadiusCurve.Evaluate(distanceToTarget))
+							if (stimulusSource.Intensity < triggerIntensity * hearingSettings.intensityRadiusCurve.Evaluate(distanceToTarget))
 								continue;
 
-							Trigger(stimulusSource.Intensity);
+							Trigger(stimulusSource);
 						}
 						continue;
 					}
 
-					Trigger(Mathf.Infinity);
+					Trigger(null);
 				}
 
-				yield return waitForSeconds;
+				yield return new WaitForSeconds(settingsPresets.Value.tickInterval);
 			}
 		}
 
 		private void OnDrawGizmosSelected()
 		{
-			if (!displayGizmos)
+			if(settingsPresets == null)
+				return;
+			
+			if(settingsPresets.EditorValue == null)
+				return;
+			
+			var hearingSettings = settingsPresets.EditorValue;
+			
+			if (!hearingSettings.displayGizmos)
 				return;
 
-			Gizmos.color = radiusColor;
-			Gizmos.DrawSphere(Origin, radius);
+			Gizmos.color = hearingSettings.radiusColor;
+			Gizmos.DrawSphere(Origin, hearingSettings.radius);
 		}
+		
 	}
 
 }
