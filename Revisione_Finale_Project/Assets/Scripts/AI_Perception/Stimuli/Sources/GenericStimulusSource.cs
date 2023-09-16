@@ -8,6 +8,7 @@ namespace AI_Perception.Stimuli.Sources
 	{
 
 		public GameObject GameObject => null;
+		public Vector3 Center => default;
 		public float Intensity => Mathf.Infinity;
 		public StimulusType StimulusType => null;
 		public Type StimulatedSenseType => null;

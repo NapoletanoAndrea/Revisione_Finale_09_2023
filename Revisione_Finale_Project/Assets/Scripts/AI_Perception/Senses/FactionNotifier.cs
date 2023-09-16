@@ -19,6 +19,7 @@ namespace AI_Perception.Senses
 
 		public bool canNotifyToOthers;
 		public bool canNotifyFromFactionNotification;
+		public bool disableAfterActivation;
 
 		public float notifySeconds;
 		[Min(0)] public float maxDistance;
@@ -29,6 +30,7 @@ namespace AI_Perception.Senses
 		public Sense[] attachedSenses;
 
 		private bool _isEnabled = true;
+		private bool _permanentlyDisabled;
 
 		private void Awake()
 		{
@@ -44,8 +46,14 @@ namespace AI_Perception.Senses
 		
 		public virtual void OnSenseTriggered(IStimulusSource stimulusSource, Sense sense)
 		{
+			if (_permanentlyDisabled)
+				return;
+			
 			if (!IsStimulusSourceValid(stimulusSource))
 				return;
+
+			if (disableAfterActivation)
+				_permanentlyDisabled = true;
 			
 			Trigger(stimulusSource);
 			Notify(sense);

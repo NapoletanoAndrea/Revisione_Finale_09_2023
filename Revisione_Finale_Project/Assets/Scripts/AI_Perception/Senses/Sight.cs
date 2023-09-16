@@ -68,16 +68,31 @@ namespace AI_Perception.Senses
 				var results = Physics.OverlapSphere(Origin, sightSettings.radius, sightSettings.stimuliMask, sightSettings.checkTriggers.ToQueryTriggerInteraction());
 				foreach (var result in results)
 				{
-					Debug.Log(results.Length);
 					#region fov calc
 
-					Vector3 directionToTarget = (result.transform.position - Origin).normalized;
-					if (Vector3.Angle(transform.forward, directionToTarget) >= sightSettings.fovAngle / 2)
+					IStimulusSource stimulusSource = null;
+					Vector3 sourcePos = result.transform.position;
+
+					if (sightSettings.useStimulusSource)
+					{
+						stimulusSource = result.GetComponent<IStimulusSource<Sight>>();
+						if (stimulusSource != null)
+						{
+							sourcePos = stimulusSource.Center;
+						}
+					}
+					
+					Vector3 directionToTarget = (sourcePos - Origin).normalized;
+					var horizontalDirection = directionToTarget;
+					horizontalDirection.y = 0;
+					horizontalDirection = horizontalDirection.normalized;
+					
+					if (Vector3.Angle(transform.forward, horizontalDirection) >= sightSettings.fovAngle / 2)
 					{
 						continue;
 					}
 
-					float distanceToTarget = Vector3.Distance(Origin, result.transform.position);
+					float distanceToTarget = Vector3.Distance(Origin, sourcePos);
 					if (Physics.Raycast(Origin, directionToTarget, distanceToTarget, sightSettings.obstacleMask, QueryTriggerInteraction.Ignore))
 					{
 						continue;
@@ -87,7 +102,6 @@ namespace AI_Perception.Senses
 
 					if (sightSettings.useStimulusSource)
 					{
-						var stimulusSource = result.GetComponent<IStimulusSource<Sight>>();
 						if (stimulusSource != null)
 						{
 							if (stimulusSource.Intensity < triggerIntensity * sightSettings.intensityRadiusCurve.Evaluate(distanceToTarget))

@@ -53,8 +53,11 @@ namespace CharacterController
 
 			if (cameraTransform == null)
 			{
-				cameraTransform = Camera.main.transform;
-				if (cameraTransform == null)
+				if (Camera.main != null)
+				{
+					cameraTransform = Camera.main.transform;
+				}
+				else
 				{
 					cameraTransform = FindObjectOfType<Camera>().transform;
 				}

@@ -44,7 +44,7 @@ namespace AI_Perception.Senses
 
 		protected void Trigger(IStimulusSource stimulusSource)
 		{
-			if (!IsValid(GetDetectableStimuli(), stimulusSource.StimulusType))
+			if (!IsValid(GetDetectableStimuli(), stimulusSource))
 				return;
 			
 			triggered?.Invoke(stimulusSource, this);
@@ -57,12 +57,15 @@ namespace AI_Perception.Senses
 			_isAlerted = true;
 		}
 
-		private bool IsValid(List<StimulusType> types, StimulusType type)
+		private bool IsValid(List<StimulusType> types, IStimulusSource stimulusSource)
 		{
+			if (stimulusSource == null)
+				return true;
+			
 			if (types == null)
 				return true;
 
-			return types.Count == 0 || types.Contains(type);
+			return types.Count == 0 || types.Contains(stimulusSource.StimulusType);
 		}
 
 		protected abstract List<StimulusType> GetDetectableStimuli();

@@ -57,6 +57,11 @@ public static class Extensions
 		return value ? trueValue : falseValue;
 	}
 
+	public static float ToFloat(this bool value, float falseValue, float trueValue)
+	{
+		return value ? trueValue : falseValue;
+	}
+
 	public static int ToInt(this bool value)
 	{
 		return value.ToInt(0, 1);

@@ -67,7 +67,7 @@ namespace AI_Perception.Senses
 				{
 					if (hearingSettings.useStimulusSource)
 					{
-						var stimulusSource = result.GetComponent<IStimulusSource<Sight>>();
+						var stimulusSource = result.GetComponent<IStimulusSource<Hearing>>();
 						if (stimulusSource != null)
 						{
 							float distanceToTarget = Vector3.Distance(Origin, result.transform.position);
