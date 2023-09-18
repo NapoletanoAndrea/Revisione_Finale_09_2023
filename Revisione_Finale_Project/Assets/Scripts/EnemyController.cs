@@ -8,6 +8,8 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour, IPerceptionReceiver
 {
+    public Transform enemyTransform;
+
     public Animator animator;
     public NavMeshAgent agent;
 
@@ -50,17 +52,17 @@ public class EnemyController : MonoBehaviour, IPerceptionReceiver
 
     private IEnumerator RotateCoroutine()
     {
-        Vector3 direction = (rotatePoint.position - transform.position).normalized;
+        Vector3 direction = (rotatePoint.position - enemyTransform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
 
         float count = 0;
         while (count < rotateSeconds)
         {
             count += Time.deltaTime;
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, count / rotateSeconds);
+            enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, lookRotation, count / rotateSeconds);
             yield return null;
         }
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1);
+        enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, lookRotation, 1);
         animator.SetBool("isYelling", true);
     }
 }

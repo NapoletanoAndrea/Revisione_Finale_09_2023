@@ -3,7 +3,13 @@
 
 hide empty members
 
-class s
+class Sense<<M, yellow>>
+
+interface IPerceptionReceiver<T>
+interface IStimulusSource
+
+Sense -> IStimulusSource
+Sense --> IPerceptionReceiver
 
 
 @enduml
